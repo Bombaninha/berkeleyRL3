@@ -1,4 +1,4 @@
-# Files that will not change
+# Files that should not be changed
 create_kit.sh
 
 src/layouts/
