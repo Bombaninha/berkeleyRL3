@@ -123,11 +123,19 @@ class QLearningAgent(ReinforcementAgent):
           HINT: To pick randomly from a list, use random.choice(list)
         """
         # Pick Action
-        legalActions = self.getLegalActions(state)
+        legal_actions = self.getLegalActions(state)
         action = None
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
 
+        # Se existir pelo menos uma ação legal
+        if(len(legal_action) > 0):
+          # Escolhemos randomicamente com probabilidade self.epsilon
+          if(util.flipCoin(self.epsilon)):
+            # Escolhe uma ação randômica
+            action = random.choice(legal_actions)
+          else:
+            # Escolhe a ação de máximo valor
+            action = self.getPolicy(state)
+            
         return action
 
     def update(self, state, action, nextState, reward):
@@ -139,8 +147,18 @@ class QLearningAgent(ReinforcementAgent):
           NOTE: You should never call this function,
           it will be called on your behalf
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+
+        # Utilizando a fórmula dada no slide (46) - Aula 15
+        # Criação de variáveis para deixar o mais parecido possível com a equação fornecida
+
+        alpha = self.alpha
+        r = reward
+        gamma = self.discount
+
+        # Optamos por essa abstração, uma vez que foi alertado pelo README dessa decisão
+        max_value = self.getValue(nextState)
+
+        self.Q[state][action] = ((1 - self.alpha) * self.getQValue(state, action)) + self.alpha * (r + gamma * max_value)
 
     def getPolicy(self, state):
         return self.computeActionFromQValues(state)
