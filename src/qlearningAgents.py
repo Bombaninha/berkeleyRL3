@@ -90,7 +90,7 @@ class QLearningAgent(ReinforcementAgent):
             
             # Se o valor da melhor ação for igual ao atual, desempata. Fonte: README
             elif(self.Q[state][legal_action] == self.Q[state][best_action]):
-            
+              best_action = random.choice([legal_action, best_action])
             # Caso desconsiderado, não deve fazer nada
             else:
               continue
