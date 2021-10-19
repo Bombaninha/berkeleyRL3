@@ -81,16 +81,22 @@ class QLearningAgent(ReinforcementAgent):
           return None
         else:
           # Inicializa a melhor ação como sendo a primeira da lista
-          best_action = legal_actions.pop(0)
+          first_element = list(legal_actions).pop(0)
+
+          best_action_value = self.getQValue(state, first_element)
+          best_action = first_element
+
           # Itera sob a primeira posição, desconsiderando a ação de posição 0
           for legal_action in legal_actions:
             # Se o valor da melhor ação for menor que a atual, realiza swap
-            if(self.Q[state][legal_action] > self.Q[state][best_action]):
-              best_action = legal_action
-            
+            if(self.getQValue(state, legal_action) > best_action_value):
+              best_action_value = self.getQValue(state, legal_action)
+              best_action = legal_action 
             # Se o valor da melhor ação for igual ao atual, desempata. Fonte: README
-            elif(self.Q[state][legal_action] == self.Q[state][best_action]):
-              best_action = random.choice([legal_action, best_action])
+            elif(self.getQValue(state, legal_action) == best_action_value):
+              random_element = random.choice([legal_action, best_action])
+              best_action = random_element
+              best_action_value = self.getQValue(state, best_action)
             # Caso desconsiderado, não deve fazer nada
             else:
               continue
