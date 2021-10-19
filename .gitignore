@@ -1,3 +1,37 @@
+# Files that will not change
+create_kit.sh
+
+src/layouts/
+src/test_cases/
+
+src/autograder.py
+src/crawler.py
+src/dynaQAgents.py
+src/environment.py
+src/featureExtractors.py
+src/game.py
+src/ghostAgents.py
+src/grading.py
+src/graphicsCrawlerDisplay.py
+src/graphicsDisplay.py
+src/graphicsGridworldDisplay.py
+src/graphicsUtils.py
+src/gridworld.py
+src/keyboardAgents.py
+src/layout.py
+src/learningAgents.py
+src/mdp.py
+src/pacman.py
+src/pacmanAgents.py
+src/projectParams.py
+src/reinforcementTestClasses.py
+src/sarsaAgents.py
+src/testClasses.py
+src/testParser.py
+src/textDisplay.py
+src/textGridWorldDisplay.py
+src/util.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
