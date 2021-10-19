@@ -57,18 +57,16 @@ class QLearningAgent(ReinforcementAgent):
           Should return 0.0 if we have never seen a state
           or the Q node value otherwise
         """
-        util.raiseNotDefined()
 
+        # Se o estado não existe na nossa tabela, acrescentamos ele
+        if(state not in self.Q):
+          self.Q[state] = {}
 
-    def computeValueFromQValues(self, state):
-        """
-          Returns max_action Q(state,action)
-          where the max is over legal actions.  Note that if
-          there are no legal actions, which is the case at the
-          terminal state, you should return a value of 0.0.
-        """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # Se a ação não existe no nosso estado e, consequentemente não existe na tabela, acrescentamos ela, zerando o valor       
+        if(action not in self.Q[state]):
+          self.Q[state][action] = 0.0
+
+        return self.Q[state][action]
 
     def computeActionFromQValues(self, state):
         """
@@ -76,7 +74,23 @@ class QLearningAgent(ReinforcementAgent):
           are no legal actions, which is the case at the terminal state,
           you should return None.
         """
-        "*** YOUR CODE HERE ***"
+        legal_actions = self.getLegalActions(state)
+
+        # Se não existe nenhuma ação legal, retorna 0
+        if(len(legal_actions) == 0):
+          return 0.0
+        else:
+          best_action = legal_actions[0]
+          for legal_action in legal_actions[1:]:
+        util.raiseNotDefined()
+        
+    def computeValueFromQValues(self, state):
+        """
+          Returns max_action Q(state,action)
+          where the max is over legal actions.  Note that if
+          there are no legal actions, which is the case at the
+          terminal state, you should return a value of 0.0.
+        """
         util.raiseNotDefined()
 
     def getAction(self, state):
