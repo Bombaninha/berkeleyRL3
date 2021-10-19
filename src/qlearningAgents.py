@@ -133,7 +133,7 @@ class QLearningAgent(ReinforcementAgent):
         action = None
 
         # Se existir pelo menos uma ação legal
-        if(len(legal_action) > 0):
+        if(len(legal_actions) > 0):
           # Escolhemos randomicamente com probabilidade self.epsilon
           if(util.flipCoin(self.epsilon)):
             # Escolhe uma ação randômica
