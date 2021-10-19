@@ -76,14 +76,27 @@ class QLearningAgent(ReinforcementAgent):
         """
         legal_actions = self.getLegalActions(state)
 
-        # Se não existe nenhuma ação legal, retorna 0
+        # Se não existe nenhuma ação legal, retorna None
         if(len(legal_actions) == 0):
-          return 0.0
+          return None
         else:
+          # Inicializa a melhor ação como sendo a primeira da lista
           best_action = legal_actions[0]
+          # Itera sob a primeira posição, desconsiderando a ação de posição 0
           for legal_action in legal_actions[1:]:
-        util.raiseNotDefined()
-        
+            # Se o valor da melhor ação for menor que a atual, realiza swap
+            if(self.Q[state][legal_action] > self.Q[state][best_action]):
+              best_action = legal_action
+            
+            # Se o valor da melhor ação for igual ao atual, desempata. Fonte: README
+            elif(self.Q[state][legal_action] == self.Q[state][best_action]):
+            
+            # Caso desconsiderado, não deve fazer nada
+            else:
+              continue
+
+        return best_action 
+
     def computeValueFromQValues(self, state):
         """
           Returns max_action Q(state,action)
