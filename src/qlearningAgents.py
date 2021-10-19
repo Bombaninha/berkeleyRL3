@@ -42,7 +42,14 @@ class QLearningAgent(ReinforcementAgent):
         "You can initialize Q-values here..."
         ReinforcementAgent.__init__(self, **args)
 
-        "*** YOUR CODE HERE ***"
+        '''
+          Linhas da tabela: estados
+          Colunas da tabela: ações
+          Entrada na tabela: Valor Q de determinado estado para uma determinada ação (todos valores são inicializados com 0)
+        '''
+
+        # Podemos usar o a estrutura de Counter, presente em util.py (simula um defaultdict)
+        self.Q = util.Counter()
 
     def getQValue(self, state, action):
         """
@@ -50,7 +57,6 @@ class QLearningAgent(ReinforcementAgent):
           Should return 0.0 if we have never seen a state
           or the Q node value otherwise
         """
-        "*** YOUR CODE HERE ***"
         util.raiseNotDefined()
 
 
