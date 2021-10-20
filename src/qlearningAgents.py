@@ -74,7 +74,6 @@ class QLearningAgent(ReinforcementAgent):
           are no legal actions, which is the case at the terminal state,
           you should return None.
         """
-
         legal_actions = self.getLegalActions(state)
 
         # Se não existe nenhuma ação legal, retorna None
