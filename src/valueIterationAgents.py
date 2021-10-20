@@ -12,6 +12,7 @@
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
+from game import Actions
 import mdp, util
 
 from learningAgents import ValueEstimationAgent
@@ -45,6 +46,21 @@ class ValueIterationAgent(ValueEstimationAgent):
 
         # Write value iteration code here
         "*** YOUR CODE HERE ***"
+        iterated = 0
+        
+        while (iterations > iterated):
+            states = self.mdp.getStates()
+            print(self.mdp.getStartState())
+            for state in states:
+                bestAction = self.computeActionFromValues(state)
+                if bestAction != None:
+                    valueActions = self.mdp.getTransitionStatesAndProbs(state, bestAction)
+                    reward = 0
+                    for valueAction in valueActions:
+                        reward += self.getValue(valueAction[0]) * valueAction[1]
+                    self.values[state] = reward + self.discount
+            iterated += 1
+
 
 
     def getValue(self, state):
@@ -60,7 +76,7 @@ class ValueIterationAgent(ValueEstimationAgent):
           value function stored in self.values.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        
 
     def computeActionFromValues(self, state):
         """
@@ -72,7 +88,20 @@ class ValueIterationAgent(ValueEstimationAgent):
           terminal state, you should return None.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        if (self.mdp.isTerminal(state)):
+            return None
+        actions = self.mdp.getPossibleActions(state)
+        selectedAction = actions[0]
+        actionValue = -99
+        for action in actions:
+            valueActions = self.mdp.getTransitionStatesAndProbs(state, action)
+            reward = 0
+            for valueAction in valueActions:
+                reward += self.values[valueAction[0]] * valueAction[1]
+            if (reward > actionValue):
+                actionValue = reward
+                selectedAction = action
+        return selectedAction
 
     def getPolicy(self, state):
         return self.computeActionFromValues(state)
