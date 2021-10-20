@@ -74,6 +74,7 @@ class QLearningAgent(ReinforcementAgent):
           are no legal actions, which is the case at the terminal state,
           you should return None.
         """
+
         legal_actions = self.getLegalActions(state)
 
         # Se não existe nenhuma ação legal, retorna None
@@ -83,19 +84,21 @@ class QLearningAgent(ReinforcementAgent):
           # Inicializa a melhor ação como sendo a primeira da lista
           first_element = list(legal_actions).pop(0)
 
-          best_action_value = self.getQValue(state, first_element)
           best_action = first_element
-
+          best_action_value = self.getQValue(state, best_action)
+          
           # Itera sob a primeira posição, desconsiderando a ação de posição 0
           for legal_action in legal_actions:
             # Se o valor da melhor ação for menor que a atual, realiza swap
             if(self.getQValue(state, legal_action) > best_action_value):
-              best_action_value = self.getQValue(state, legal_action)
-              best_action = legal_action 
+              best_action = legal_action
+              best_action_value = self.getQValue(state, best_action)
             # Se o valor da melhor ação for igual ao atual, desempata. Fonte: README
             elif(self.getQValue(state, legal_action) == best_action_value):
-              random_element = random.choice([legal_action, best_action])
-              best_action = random_element
+              possible_actions = [ legal_action, best_action ]
+              random_action = random.choice(possible_actions)
+              
+              best_action = random_action
               best_action_value = self.getQValue(state, best_action)
             # Caso desconsiderado, não deve fazer nada
             else:
@@ -110,12 +113,12 @@ class QLearningAgent(ReinforcementAgent):
           there are no legal actions, which is the case at the
           terminal state, you should return a value of 0.0.
         """
-        max_action = self.computeActionFromQValues(state)
+        max_action = self.getPolicy(state)
 
         if(max_action == None):
           return 0.0
         else:
-          return self.Q[state][max_action]
+          return self.getQValue(state, max_action)
 
     def getAction(self, state):
         """
@@ -164,7 +167,7 @@ class QLearningAgent(ReinforcementAgent):
         # Optamos por essa abstração, uma vez que foi alertado pelo README dessa decisão
         max_value = self.getValue(nextState)
 
-        self.Q[state][action] = ((1 - self.alpha) * self.getQValue(state, action)) + self.alpha * (r + gamma * max_value)
+        self.Q[state][action] = ((1 - alpha) * self.getQValue(state, action)) + alpha * (r + gamma * max_value)
 
     def getPolicy(self, state):
         return self.computeActionFromQValues(state)
@@ -226,15 +229,36 @@ class ApproximateQAgent(PacmanQAgent):
           Should return Q(state,action) = w * featureVector
           where * is the dotProduct operator
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+
+        # Q(s,a) = ∑ f_i(s,a) w_i
+
+        total_sum = 0
+        features = self.featExtractor.getFeatures(state, action)
+
+        # https://www.horadecodar.com.br/2020/07/08/como-iterar-em-dicionarios-utilizando-for-em-python/
+        for key, value in features.items():
+          total_sum += value * self.weights[key]
+
+        return total_sum
 
     def update(self, state, action, nextState, reward):
         """
            Should update your weights based on transition
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # δ = r + γ max Q(s', a') - Q(s,a)
+        # w_i ← w_i + α . δ . f_i(s,a)
+        alpha = self.alpha
+        r = reward
+        gamma = self.discount
+
+        features = self.featExtractor.getFeatures(state, action)
+        weights = self.weights
+
+        # getValue com problema: 'int' object is not subscriptable
+        delta = r + gamma * self.getValue(nextState) - self.getQValue(state, action)
+
+        for key, value in weights.items():
+          self.weights[key] = value + alpha * delta * features[key]
 
     def final(self, state):
         "Called at the end of each game."
@@ -244,5 +268,5 @@ class ApproximateQAgent(PacmanQAgent):
         # did we finish training?
         if self.episodesSoFar == self.numTraining:
             # you might want to print your weights here for debugging
-            "*** YOUR CODE HERE ***"
+            print(self.weights)
             pass
